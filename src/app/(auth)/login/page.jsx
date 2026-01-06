@@ -53,8 +53,7 @@ export default function LoginPage() {
         return;
       }
       await sleep(2000);
-      const res = await login(data.identifier, data.password);
-      console.log(res);
+      await login(data.identifier, data.password);
       toast.success("Login successful!");
       router.push("/dashboard");
     } catch (error) {
@@ -84,6 +83,7 @@ export default function LoginPage() {
             label="Password"
             type={showPassword ? "text" : "password"}
             {...register("password")}
+            autoComplete="off"
             disabled={isSubmitting}
             error={!!errors.password}
             helperText={errors.password?.message}

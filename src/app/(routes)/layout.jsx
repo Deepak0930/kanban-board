@@ -15,6 +15,7 @@ import {
   useMediaQuery,
   Avatar,
   Button,
+  Tooltip,
 } from "@mui/material";
 
 import MenuIcon from "@mui/icons-material/Menu";
@@ -108,7 +109,9 @@ export default function DashboardLayout({ children }) {
           </Box>
 
           <Box display="flex" alignItems="center" gap={2}>
-            <Avatar src={user?.profilePic} />
+            <Tooltip title={user?.name || ""}>
+              <Avatar src={user?.profilePic || "./profile.jpeg"} />
+            </Tooltip>
             <Button size="small" onClick={handleLogout}>
               Logout
             </Button>

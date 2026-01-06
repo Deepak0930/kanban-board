@@ -5,10 +5,8 @@ import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/store/auth-store";
 
 export default function AuthGuard({ children }) {
-  const user = useAuthStore((s) => s.user);
+  const { user } = useAuthStore();
   const router = useRouter();
-
-  // console.log(user)
 
   useEffect(() => {
     if (!user) {

@@ -33,8 +33,16 @@ export default function DashboardPage() {
 function StatCard({ title, value }) {
   return (
     <Grid size={{ xs: 12, md: 4 }}>
-      <Paper variant="outlined" sx={{ p: 3, borderRadius: 4, textAlign: "center" }}>
-        <Typography variant="h6" fontWeight={500} color="text.secondary" mb={1.5}>
+      <Paper
+        variant="outlined"
+        sx={{ p: 3, borderRadius: 4, textAlign: "center" }}
+      >
+        <Typography
+          variant="h6"
+          fontWeight={500}
+          color="text.secondary"
+          mb={1.5}
+        >
           {title}
         </Typography>
         <Typography variant="h4">{value}</Typography>

@@ -78,12 +78,11 @@ export default function SignupPage() {
         password: data.password,
         profilePic,
       };
-      await axios.post("/users", payload);
       await sleep(1000);
+      await axios.post("/users", payload);
       toast.success("Registration successful! Please login.");
       router.push("/login");
     } catch (error) {
-      console.log(error);
       toast.error(error?.message || "Something went wrong");
     }
   };
@@ -148,7 +147,12 @@ export default function SignupPage() {
             {...register("contact")}
             disabled={isSubmitting}
             error={!!errors.contact}
-            inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
+            slotProps={{
+              htmlInput: {
+                inputMode: "numeric",
+                pattern: "[0-9]*",
+              },
+            }}
             helperText={errors.contact?.message}
           />
 
