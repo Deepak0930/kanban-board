@@ -9,12 +9,6 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.request.use(
   async (config) => {
     config.headers["Content-Type"] = config.contentType || "application/json";
-    // if (config.token === undefined) {
-    //   const accessToken = await getAuth0Token();
-    //   if (accessToken) {
-    //     config.headers.Authorization = `Bearer ${accessToken}`;
-    //   }
-    // }
     return config;
   },
   (error) => {

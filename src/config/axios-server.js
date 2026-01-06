@@ -2,19 +2,13 @@ import axios from "axios";
 
 // Create an instance of axios
 const axiosInstance = axios.create({
-  baseURL: "http://localhost:3000", // Set your API base URL from env variables
+  baseURL: process.env.NEXT_PUBLIC_LOCAL_BASE_URL, // Set local base url
 });
 
 // Request Interceptor
 axiosInstance.interceptors.request.use(
   async (config) => {
     config.headers["Content-Type"] = config.contentType || "application/json";
-    // if (config.token === undefined) {
-    //   const accessToken = await getAuth0Token();
-    //   if (accessToken) {
-    //     config.headers.Authorization = `Bearer ${accessToken}`;
-    //   }
-    // }
     return config;
   },
   (error) => {

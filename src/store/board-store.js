@@ -34,11 +34,11 @@ export const useBoardStore = create((set) => ({
   moveTask: async (id, stage) => {
     try {
       set({ isLoading: true });
+      await axios.patch(`/tasks/${id}`, { stage });
       set((state) => ({
         tasks: state.tasks.map((t) => (t.id === id ? { ...t, stage } : t)),
         isLoading: false,
       }));
-      await axios.patch(`/tasks/${id}`, { stage });
     } catch (error) {
       set({ isLoading: false });
       throw error;
@@ -65,15 +65,13 @@ export const useBoardStore = create((set) => ({
       set({ isLoading: true });
       await sleep(2000);
       const res = await axios.patch(`/tasks/${task.id}`, task);
-
       set((state) => ({
         tasks: state.tasks.map((t) => (t.id === task.id ? res.data : t)),
         isLoading: false,
       }));
     } catch (error) {
-      console.log(error?.message);
       set({ isLoading: false });
-      throw new Error(error.message);
+      throw error;
     }
   },
 }));

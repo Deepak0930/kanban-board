@@ -60,6 +60,7 @@ export default function KanbanPage() {
   const [editTask, setEditTask] = useState(null);
   const [deleteTask, setDeleteTask] = useState(null);
 
+  // Sensors to support touch devices & keyboard
   const sensors = useSensors(
     useSensor(MouseSensor),
     useSensor(TouchSensor),
@@ -141,6 +142,7 @@ export default function KanbanPage() {
       // Get new stage based on direction
       const newStage = task.stage + dir;
       if (newStage < 0 || newStage > 3) return;
+
       await moveTask(task.id, newStage);
       toast.success("Task moved successfully");
     } catch (error) {
@@ -272,7 +274,7 @@ export default function KanbanPage() {
           Cancel
         </Button>
         <Button variant="contained" onClick={saveEdit} disabled={isLoading}>
-          {isLoading ? "Please wait..." : "Save"}
+          {isLoading ? "Please wait..." : "Update"}
         </Button>
       </DialogActions>
     </Dialog>
@@ -354,7 +356,7 @@ export default function KanbanPage() {
           ))}
         </Box>
 
-        {/* Indicators for drag and drop */}
+        {/* Indicator for the task currently being dragged */}
         <DragOverlay>
           {activeTask && (
             <Paper sx={{ p: 1.5, width: 220, boxShadow: 4 }}>

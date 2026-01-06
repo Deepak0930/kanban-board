@@ -35,15 +35,14 @@ export function TaskCard({ task, onMove, onEdit, onDelete }) {
         borderRadius: 2,
         transform: CSS.Transform.toString(transform),
         transition,
-        // "&:hover": { boxShadow: 3 },
       }}
       className="ring-1! ring-gray-300"
     >
-      <Box display="flex" gap={1} alignItems="">
+      <Box display="flex" gap={1}>
         <Box {...listeners} sx={{ cursor: "grab" }}>
           <DragIndicatorIcon />
         </Box>
-        <Stack sx={{ flex: 1, gap: 0.5 }}>
+        <Stack sx={{ flex: 1, gap: 0.5, pointerEvents: "none" }}>
           <Typography fontWeight={500}>{task.name}</Typography>
           <Typography
             variant="body2"
@@ -56,7 +55,7 @@ export function TaskCard({ task, onMove, onEdit, onDelete }) {
       </Box>
 
       <Box sx={{ display: "flex", gap: 1.5, alignItems: "center" }}>
-        <Tooltip title="Move Back">
+        <Tooltip title={task.stage === 0 ? "" : "Move Back"}>
           <span>
             <IconButton
               size="small"
@@ -71,7 +70,7 @@ export function TaskCard({ task, onMove, onEdit, onDelete }) {
           </span>
         </Tooltip>
 
-        <Tooltip title="Move Forward">
+        <Tooltip title={task.stage === 3 ? "" : "Move Forward"}>
           <span>
             <IconButton
               size="small"
