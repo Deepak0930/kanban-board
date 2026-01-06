@@ -13,6 +13,7 @@ import {
   useSensors,
 } from "@dnd-kit/core";
 import {
+  arrayMove,
   SortableContext,
   sortableKeyboardCoordinates,
   verticalListSortingStrategy,
@@ -91,7 +92,7 @@ export default function KanbanPage() {
       setForm({ name: "", priority: "", deadline: "" });
       fetchTasks();
     } catch (error) {
-      toast.error(error?.messsage || "Failed to create task");
+      toast.error(error?.message || "Failed to create task");
     }
   };
 
@@ -126,14 +127,36 @@ export default function KanbanPage() {
         if (targetTask) newStage = targetTask.stage;
       }
 
-      // No change if dropped in same stage
-      if (newStage === null || newStage === task.stage) return;
+      if (newStage === null) return;
+
+      // Reorder tasks in same column if tasks are moved inside same column.
+      if (newStage === task.stage) {
+        const columnTasks = tasks.filter((t) => t.stage === task.stage);
+        const oldIndex = active.data.current.sortable.index;
+        const newIndex = over.data.current.sortable.index;
+
+        if (oldIndex === newIndex) return;
+
+        const reordered = arrayMove(columnTasks, oldIndex, newIndex);
+        const updatedTasks = [];
+        let reorderIndex = 0;
+        for (const t of tasks) {
+          if (t.stage === task.stage) {
+            updatedTasks.push(reordered[reorderIndex++] || t);
+          } else {
+            updatedTasks.push(t);
+          }
+        }
+        useBoardStore.setState({ tasks: updatedTasks });
+        toast.success("Task moved successfully");
+        return;
+      }
 
       // API call to move task
       await moveTask(task.id, newStage);
       toast.success("Task moved successfully");
     } catch (error) {
-      toast.error(error?.messsage || "Failed to move task");
+      toast.error(error?.message || "Failed to move task");
     }
   };
 
@@ -146,7 +169,7 @@ export default function KanbanPage() {
       await moveTask(task.id, newStage);
       toast.success("Task moved successfully");
     } catch (error) {
-      toast.error(error?.messsage || "Failed to move task");
+      toast.error(error?.message || "Failed to move task");
     }
   };
 
@@ -157,18 +180,19 @@ export default function KanbanPage() {
       setEditTask(null);
       fetchTasks();
     } catch (error) {
-      toast.error(error?.messsage || "Failed to save changes");
+      toast.error(error?.message || "Failed to save changes");
     }
   };
 
   const confirmDelete = async () => {
     try {
       await removeTask(deleteTask.id);
+
       toast.success("Task deleted successfully");
       setDeleteTask(null);
       fetchTasks();
     } catch (error) {
-      toast.error(error?.messsage || "Failed to delete task");
+      toast.error(error?.message || "Failed to delete task");
     }
   };
 
@@ -358,11 +382,11 @@ export default function KanbanPage() {
 
         {/* Indicator for the task currently being dragged */}
         <DragOverlay>
-          {activeTask && (
+          {activeTask ? (
             <Paper sx={{ p: 1.5, width: 220, boxShadow: 4 }}>
               <Typography fontWeight={500}>{activeTask.name}</Typography>
             </Paper>
-          )}
+          ) : null}
         </DragOverlay>
 
         {/* Trash */}
