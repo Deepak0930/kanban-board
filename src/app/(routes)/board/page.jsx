@@ -76,8 +76,16 @@ export default function KanbanPage() {
     deadline: "",
   });
 
+  const loadTasks = async () => {
+    try {
+      await fetchTasks();
+    } catch (error) {
+      toast.error(error?.message || "Failed to fetch tasks");
+    }
+  };
+
   useEffect(() => {
-    fetchTasks();
+    loadTasks();
   }, []);
 
   const handleCreateTask = async () => {
@@ -90,7 +98,7 @@ export default function KanbanPage() {
       await addTask({ ...form, stage: 0 });
       toast.success("Task created successfully");
       setForm({ name: "", priority: "", deadline: "" });
-      fetchTasks();
+      loadTasks();
     } catch (error) {
       toast.error(error?.message || "Failed to create task");
     }
@@ -178,7 +186,7 @@ export default function KanbanPage() {
       await updateTask(editTask);
       toast.success("Task updated successfully");
       setEditTask(null);
-      fetchTasks();
+      loadTasks();
     } catch (error) {
       toast.error(error?.message || "Failed to save changes");
     }
@@ -190,7 +198,7 @@ export default function KanbanPage() {
 
       toast.success("Task deleted successfully");
       setDeleteTask(null);
-      fetchTasks();
+      loadTasks();
     } catch (error) {
       toast.error(error?.message || "Failed to delete task");
     }

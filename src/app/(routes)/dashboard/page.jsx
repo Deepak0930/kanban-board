@@ -3,13 +3,22 @@
 import { Box, Typography, Grid, Paper } from "@mui/material";
 import { useEffect } from "react";
 import { useBoardStore } from "@/store/board-store";
+import toast from "react-hot-toast";
 
 export default function DashboardPage() {
   const { tasks, fetchTasks } = useBoardStore();
 
+  const loadTasks = async () => {
+    try {
+      await fetchTasks();
+    } catch (error) {
+      toast.error(error?.message || "Failed to fetch tasks");
+    }
+  };
+
   useEffect(() => {
-    fetchTasks();
-  }, [fetchTasks]);
+    loadTasks();
+  }, []);
 
   const total = tasks?.length;
   const completed = tasks?.filter((t) => t.stage === 3).length;
